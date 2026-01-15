@@ -1,0 +1,668 @@
+<!-- Navigation -->
+<nav [class.scrolled]="isNavbarScrolled()" class="navbar fixed-top">
+  <div class="container">
+    <div class="navbar-content">
+      <div class="navbar-brand gradient-text">
+        &lt;Ramiro Di Fraia /&gt;
+      </div>
+      
+      <!-- Theme Toggle -->
+      <button 
+        class="theme-toggle" 
+        (click)="toggleTheme()"
+        [attr.aria-label]="isDarkMode() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
+        <i class="bi" [class.bi-sun-fill]="!isDarkMode()" [class.bi-moon-fill]="isDarkMode()"></i>
+      </button>
+
+      <!-- Links Desktop -->
+      <div class="navbar-links d-none d-lg-flex">
+        <button
+          *ngFor="let section of ['inicio', 'proyectos', 'habilidades', 'sobre-mi', 'contacto']"
+          (click)="scrollToSection(section)"
+          [class.active]="isActive(section)"
+          class="nav-link-btn"
+        >
+          {{ section === 'sobre-mi' ? 'Sobre Mí' : section.charAt(0).toUpperCase() + section.slice(1) }}
+        </button>
+      </div>
+
+      <!-- Botón Hamburguesa -->
+      <button 
+        class="hamburger-btn d-lg-none" 
+        (click)="toggleMobileMenu()"
+        [class.active]="isMobileMenuOpen()"
+        aria-label="Menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" [class.active]="isMobileMenuOpen()">
+  <div class="mobile-menu-content">
+    <button
+      *ngFor="let section of ['inicio', 'proyectos', 'habilidades', 'sobre-mi', 'contacto']"
+      (click)="scrollToSection(section)"
+      [class.active]="isActive(section)"
+      class="mobile-menu-link"
+    >
+      {{ section === 'sobre-mi' ? 'Sobre Mí' : section.charAt(0).toUpperCase() + section.slice(1) }}
+    </button>
+  </div>
+</div>
+
+<!-- Overlay cuando el menú está abierto -->
+<div 
+  class="mobile-menu-overlay" 
+  [class.active]="isMobileMenuOpen()"
+  (click)="toggleMobileMenu()"
+></div>
+
+<!-- Hero Section -->
+<section id="inicio" class="hero-section min-vh-100 d-flex align-items-center">
+  <div class="container">
+    <div class="row align-items-center">
+      
+      <!-- Columna izquierda: Foto -->
+      <div class="col-lg-4 text-center mb-4 mb-lg-0 animate-on-scroll">
+        <div class="profile-image-container">
+          <img src="assets/images/profile.jpg" alt="Ramiro Di Fraia" class="profile-image" loading="lazy">
+          <div class="status-badge">
+            <i class="bi bi-circle-fill text-success"></i>
+            Disponible para trabajar
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha: Info -->
+      <div class="col-lg-8">
+        <h1 class="display-3 fw-bold mb-3 animate-on-scroll">
+          Hola, soy <span class="gradient-text">Ramiro Di Fraia</span>
+        </h1>
+        
+        <h2 class="h3 text-secondary mb-4 animate-on-scroll">
+          Desarrollador Web Full Stack
+        </h2>
+        
+        <p class="lead text-muted mb-4 animate-on-scroll">
+          Estudiante avanzado de Tecnicatura en Programación en UTN Avellaneda. 
+          Especializado en desarrollo web con Angular, TypeScript y tecnologías modernas.
+          Apasionado por crear soluciones eficientes y escalables.
+        </p>
+
+        <!-- Botones de acción -->
+        <div class="d-flex flex-wrap gap-3 mb-4 animate-on-scroll">
+          <a href="#proyectos" class="btn btn-violet">
+            <i class="bi bi-code-slash me-2"></i>
+            Ver Proyectos
+          </a>
+          <a href="#" class="btn btn-violet-outline">
+            <i class="bi bi-download me-2"></i>
+            Descargar CV
+          </a>
+        </div>
+
+        <!-- Iconos de redes y email -->
+        <div class="contact-info-group animate-on-scroll">
+          <div class="social-links">
+            <a href="https://github.com/RamiroDi" class="social-icon" target="_blank" rel="noopener noreferrer">
+              <i class="bi bi-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/ramiro-di-fraia-a07531291/" class="social-icon" target="_blank" rel="noopener noreferrer">
+              <i class="bi bi-linkedin"></i>
+            </a>
+            <a href="mailto:ramirodifraia@gmail.com" class="social-icon">
+              <i class="bi bi-envelope-fill"></i>
+            </a>
+            <span class="email-inline">ramirodifraia@gmail.com</span>
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="location-badge mt-3 animate-on-scroll">
+          <i class="bi bi-geo-alt-fill me-2"></i>
+          Lanús, Buenos Aires, Argentina
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Proyectos Section -->
+<section id="proyectos" class="proyectos-section py-5">
+  <div class="container">
+    
+    <!-- Título de sección -->
+    <div class="section-header text-center mb-5 animate-on-scroll">
+      <h2 class="display-4 fw-bold mb-3">
+        Mis <span class="gradient-text">Proyectos</span>
+      </h2>
+      <p class="lead text-muted">
+        Algunos de los proyectos en los que he trabajado
+      </p>
+    </div>
+
+    <!-- Grid de proyectos -->
+    <div class="row g-4">
+      
+      <!-- Proyecto: TCG Social -->
+      <div class="col-lg-4 col-md-6 animate-on-scroll">
+        <div class="project-card card-custom h-100">
+          <div class="project-image">
+            <img src="assets/images/tcg-social.jpg" alt="TCG Social" class="w-100" loading="lazy">
+          </div>
+          <div class="project-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="h5 mb-0">TCG Social</h3>
+              <span class="badge-status status-progress">En desarrollo</span>
+            </div>
+            <p class="text-muted mb-3">
+              Red social para coleccionistas y jugadores de TCG. Incluye sistema de publicaciones, 
+              perfiles personalizados, mensajería privada en tiempo real y comunidades dedicadas 
+              a Yu-Gi-Oh!, Pokémon TCG y Magic: The Gathering.
+            </p>
+            <div class="tech-tags mb-3">
+              <span class="tech-tag">Angular</span>
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">NestJS</span>
+              <span class="tech-tag">MongoDB</span>
+            </div>
+            <div class="project-links">
+              <button class="btn btn-sm btn-violet me-2" disabled title="Código privado - Proyecto comercial en desarrollo">
+                <i class="bi bi-lock-fill me-1"></i> Código Privado
+              </button>
+              <a href="https://red-social-tcg-frontend.vercel.app" class="btn btn-sm btn-violet-outline" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Ver Demo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proyecto: Sala de Juegos -->
+      <div class="col-lg-4 col-md-6 animate-on-scroll">
+        <div class="project-card card-custom h-100">
+          <div class="project-image">
+            <img src="assets/images/sala-juegos.jpg" alt="Sala de Juegos" class="w-100" loading="lazy">
+          </div>
+          <div class="project-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="h5 mb-0">Sala de Juegos</h3>
+              <span class="badge-status status-completed">Completado</span>
+            </div>
+            <p class="text-muted mb-3">
+              Plataforma de minijuegos con diseño gaming moderno. Incluye sistema de autenticación, 
+              ranking de jugadores y múltiples juegos interactivos como Ahorcado y Mayor o Menor.
+            </p>
+            <div class="tech-tags mb-3">
+              <span class="tech-tag">Angular</span>
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">Bootstrap</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/RamiroDi/RamiroDi-ProgIV-SalaDeJuegos" class="btn btn-sm btn-violet me-2" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-github me-1"></i> Código
+              </a>
+              <a href="https://ramiro-di-prog-iv-sala-de-juegos.vercel.app/" class="btn btn-sm btn-violet-outline" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Demo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<!-- Habilidades Section -->
+<section id="habilidades" class="habilidades-section py-5">
+  <div class="container">
+    
+    <!-- Título de sección -->
+    <div class="section-header text-center mb-5 animate-on-scroll">
+      <h2 class="display-4 fw-bold mb-3">
+        Stack <span class="gradient-text">Tecnológico</span>
+      </h2>
+      <p class="lead">
+        Tecnologías y herramientas con las que trabajo
+      </p>
+    </div>
+
+    <!-- Lenguajes de Programación -->
+    <div class="skills-category mb-5">
+      <h3 class="h4 mb-4 animate-on-scroll">
+        <i class="bi bi-code-square me-2 text-violet"></i>
+        Lenguajes de Programación
+      </h3>
+      <div class="row g-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-javascript-plain colored skill-icon-devicon"></i>
+            <h5>JavaScript</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 85%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-typescript-plain colored skill-icon-devicon"></i>
+            <h5>TypeScript</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 70%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-python-plain colored skill-icon-devicon"></i>
+            <h5>Python</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 75%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-html5-plain colored skill-icon-devicon"></i>
+            <h5>HTML</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 85%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-css3-plain colored skill-icon-devicon"></i>
+            <h5>CSS</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 85%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frameworks y Librerías -->
+    <div class="skills-category mb-5">
+      <h3 class="h4 mb-4 animate-on-scroll">
+        <i class="bi bi-layers me-2 text-violet"></i>
+        Frameworks y Librerías
+      </h3>
+      <div class="row g-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-angularjs-plain colored skill-icon-devicon"></i>
+            <h5>Angular</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 75%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-bootstrap-plain colored skill-icon-devicon"></i>
+            <h5>Bootstrap</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 70%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-nestjs-original colored skill-icon-devicon"></i>
+            <h5>NestJS</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 65%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-nodejs-plain colored skill-icon-devicon"></i>
+            <h5>Node.js</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 70%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-express-original skill-icon-devicon"></i>
+            <h5>Express.js</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 60%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-tailwindcss-plain colored skill-icon-devicon"></i>
+            <h5>Tailwind CSS</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 45%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Software y Herramientas -->
+    <div class="skills-category mb-5">
+      <h3 class="h4 mb-4 animate-on-scroll">
+        <i class="bi bi-tools me-2 text-violet"></i>
+        Software y Herramientas
+      </h3>
+      <div class="row g-3">
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-git-plain colored skill-icon-devicon"></i>
+            <h5>Git</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 75%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-npm-original-wordmark colored skill-icon-devicon"></i>
+            <h5>NPM</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 70%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-postman-plain colored skill-icon-devicon"></i>
+            <h5>Postman</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 65%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-vscode-plain colored skill-icon-devicon"></i>
+            <h5>VS Code</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 80%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
+          <div class="skill-card">
+            <i class="devicon-mysql-plain colored skill-icon-devicon"></i>
+            <h5>MySQL</h5>
+            <div class="skill-bar">
+              <div class="skill-progress" style="width: 45%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Versatilidad -->
+    <div class="versatility-banner animate-on-scroll">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h3 class="h4 mb-3">
+            <i class="bi bi-lightbulb me-2"></i>
+            Adaptabilidad y Aprendizaje Continuo
+          </h3>
+          <p class="mb-0">
+            Mi enfoque está en entender los fundamentos y adaptarme rápidamente a nuevas tecnologías. 
+            Utilizo herramientas modernas como IA para optimizar el desarrollo y aprender constantemente. 
+            <strong>Si un proyecto requiere una tecnología específica, cuento con la capacidad de aprenderla 
+            y aplicarla eficientemente.</strong>
+          </p>
+        </div>
+        <div class="col-lg-4 text-center">
+          <i class="bi bi-gear-fill versatility-icon"></i>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Sobre Mí Section -->
+<section id="sobre-mi" class="sobre-mi-section py-5">
+  <div class="container">
+    
+    <!-- Título de sección -->
+    <div class="section-header text-center mb-5 animate-on-scroll">
+      <h2 class="display-4 fw-bold mb-3">
+        Sobre <span class="gradient-text">Mí</span>
+      </h2>
+      <p class="lead">
+        Conoce más sobre mi formación y trayectoria
+      </p>
+    </div>
+
+    <div class="row justify-content-center">
+      
+      <!-- Card principal -->
+      <div class="col-lg-8 animate-on-scroll">
+        <div class="info-card">
+          
+          <!-- Educación -->
+          <div class="info-header mb-4">
+            <i class="bi bi-mortarboard-fill info-icon"></i>
+            <h3 class="h4 mb-0">Educación</h3>
+          </div>
+          
+          <div class="education-item mb-4">
+            <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+              <div>
+                <h5 class="mb-1">Tecnicatura en Programación</h5>
+                <p class="text-violet mb-0">Universidad Tecnológica Nacional</p>
+              </div>
+              <span class="badge-date">2024 - Presente</span>
+            </div>
+            <p class="text-secondary mb-3">
+              <i class="bi bi-geo-alt-fill me-2"></i>UTN Avellaneda, Buenos Aires
+            </p>
+            <p class="text-muted">
+              A un paso de recibirme. Enfocado en desarrollo web full stack con tecnologías modernas. 
+              Durante la carrera desarrollé múltiples proyectos prácticos utilizando Angular, TypeScript, 
+              Python y metodologías ágiles.
+            </p>
+          </div>
+
+          <hr class="divider my-4">
+
+          <!-- Sobre mí - texto personal -->
+          <div class="about-text">
+            <h4 class="mb-3">¿Quién soy?</h4>
+            <p class="text-secondary">
+              Soy un desarrollador apasionado por la tecnología y el aprendizaje continuo. 
+              Me especializo en crear aplicaciones web modernas y funcionales, siempre buscando 
+              las mejores prácticas y soluciones eficientes.
+            </p>
+            <p class="text-secondary mb-0">
+              Utilizo herramientas modernas como IA para optimizar mi flujo de trabajo, sin perder 
+              de vista la importancia de entender profundamente el código que escribo. Estoy 
+              constantemente explorando nuevas tecnologías y metodologías para mejorar mis habilidades.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- Contacto Section -->
+<section id="contacto" class="contacto-section py-5">
+  <div class="container">
+    
+    <!-- Título de sección -->
+    <div class="section-header text-center mb-5 animate-on-scroll">
+      <h2 class="display-4 fw-bold mb-3">
+        <span class="gradient-text">Conectemos</span>
+      </h2>
+      <p class="lead">
+        Estoy disponible para nuevas oportunidades. ¡Hablemos!
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center mb-5">
+      
+      <!-- Email -->
+      <div class="col-lg-4 col-md-6 animate-on-scroll">
+        <a href="mailto:ramirodifraia@gmail.com" class="contact-card">
+          <div class="contact-icon">
+            <i class="bi bi-envelope-fill"></i>
+          </div>
+          <h5>Email</h5>
+          <p>ramirodifraia@gmail.com</p>
+          <span class="contact-action">Enviar correo <i class="bi bi-arrow-right ms-2"></i></span>
+        </a>
+      </div>
+
+      <!-- GitHub -->
+      <div class="col-lg-4 col-md-6 animate-on-scroll">
+        <a href="https://github.com/RamiroDi" target="_blank" rel="noopener noreferrer" class="contact-card">
+          <div class="contact-icon">
+            <i class="bi bi-github"></i>
+          </div>
+          <h5>GitHub</h5>
+          <p>github.com/RamiroDi</p>
+          <span class="contact-action">Ver perfil <i class="bi bi-arrow-right ms-2"></i></span>
+        </a>
+      </div>
+
+      <!-- LinkedIn -->
+      <div class="col-lg-4 col-md-6 animate-on-scroll">
+        <a href="https://www.linkedin.com/in/ramiro-di-fraia-a07531291/" target="_blank" rel="noopener noreferrer" class="contact-card">
+          <div class="contact-icon">
+            <i class="bi bi-linkedin"></i>
+          </div>
+          <h5>LinkedIn</h5>
+          <p>linkedin.com/in/ramiro-di-fraia</p>
+          <span class="contact-action">Conectar <i class="bi bi-arrow-right ms-2"></i></span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Formulario de Contacto -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8 animate-on-scroll">
+        <div class="contact-form-card">
+          <h3 class="h4 mb-4 text-center">O envíame un mensaje directo</h3>
+          
+          <form (ngSubmit)="submitContactForm()" #contactFormRef="ngForm">
+            <div class="row g-3">
+              
+              <div class="col-md-6">
+                <label for="name" class="form-label">Nombre</label>
+                <input 
+                  type="text" 
+                  class="form-control form-control-custom" 
+                  id="name"
+                  [(ngModel)]="contactForm.name"
+                  name="name"
+                  placeholder="Tu nombre"
+                  required
+                >
+              </div>
+
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input 
+                  type="email" 
+                  class="form-control form-control-custom" 
+                  id="email"
+                  [(ngModel)]="contactForm.email"
+                  name="email"
+                  placeholder="tu@email.com"
+                  required
+                >
+              </div>
+
+              <div class="col-12">
+                <label for="message" class="form-label">Mensaje</label>
+                <textarea 
+                  class="form-control form-control-custom" 
+                  id="message"
+                  [(ngModel)]="contactForm.message"
+                  name="message"
+                  rows="5"
+                  placeholder="Escribe tu mensaje aquí..."
+                  required
+                ></textarea>
+              </div>
+
+              <div class="col-12 text-center">
+                <button 
+                  type="submit" 
+                  class="btn btn-violet btn-lg"
+                  [disabled]="formSubmitting()"
+                >
+                  <span *ngIf="!formSubmitting()">
+                    <i class="bi bi-send me-2"></i>
+                    Enviar Mensaje
+                  </span>
+                  <span *ngIf="formSubmitting()">
+                    <i class="bi bi-hourglass-split me-2"></i>
+                    Enviando...
+                  </span>
+                </button>
+              </div>
+
+              <!-- Mensaje de éxito -->
+              <div class="col-12" *ngIf="formSubmitted()">
+                <div class="alert alert-success-custom">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  ¡Mensaje enviado con éxito! Te responderé pronto.
+                </div>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Built With Section -->
+<section class="built-with-section py-5 animate-on-scroll">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h5 class="text-secondary mb-3">Este portafolio fue construido con</h5>
+      <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
+        <div class="built-tech">
+          <i class="devicon-angularjs-plain colored" style="font-size: 3rem;"></i>
+          <p class="mb-0 mt-2 text-secondary small">Angular</p>
+        </div>
+        <div class="built-tech">
+          <i class="devicon-typescript-plain colored" style="font-size: 3rem;"></i>
+          <p class="mb-0 mt-2 text-secondary small">TypeScript</p>
+        </div>
+        <div class="built-tech">
+          <i class="devicon-bootstrap-plain colored" style="font-size: 3rem;"></i>
+          <p class="mb-0 mt-2 text-secondary small">Bootstrap</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer-minimal py-3">
+  <div class="container">
+    <div class="text-center">
+      <p class="mb-0 text-secondary small">
+        © 2025 Ramiro Di Fraia
+      </p>
+    </div>
+  </div>
+</footer>
