@@ -1,19 +1,10 @@
 {
-  "version": 2,
-  "name": "ramiro-portfolio",
-  "builds": [
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/portfolio/browser",
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist/portfolio"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
