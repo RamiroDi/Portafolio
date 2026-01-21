@@ -1,177 +1,419 @@
-import { Component, signal, effect, OnInit, PLATFORM_ID, inject, afterNextRender } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, signal, ViewChild, effect, HostListener, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, NgForm } from '@angular/forms';
+import emailjs from '@emailjs/browser';
+
+// Interfaces
+interface Translation {
+  nav: {
+    inicio: string;
+    proyectos: string;
+    habilidades: string;
+    sobreMi: string;
+    contacto: string;
+  };
+  hero: {
+    greeting: string;
+    title: string;
+    subtitle: string;
+    description: string;
+    disponible: string;
+    verProyectos: string;
+    descargarCV: string;
+  };
+  proyectos: {
+    titulo: string;
+    subtitulo: string;
+    enDesarrollo: string;
+    completado: string;
+    codigoPrivado: string;
+    verCodigo: string;
+    verDemo: string;
+  };
+  habilidades: {
+    titulo: string;
+    frontend: string;
+    backend: string;
+    baseDatos: string;
+    herramientas: string;
+  };
+  sobreMi: {
+    titulo: string;
+    educacion: string;
+    ubicacion: string;
+    quienSoy: string;
+    descripcion1: string;
+    descripcion2: string;
+  };
+  contacto: {
+    titulo: string;
+    subtitulo: string;
+    email: string;
+    enviarCorreo: string;
+    verPerfil: string;
+    conectar: string;
+    formulario: {
+      titulo: string;
+      nombre: string;
+      nombrePlaceholder: string;
+      email: string;
+      emailPlaceholder: string;
+      mensaje: string;
+      mensajePlaceholder: string;
+      enviar: string;
+      enviando: string;
+      exito: string;
+      error: string;
+    };
+  };
+  footer: {
+    construido: string;
+  };
+}
+
+interface Translations {
+  [key: string]: Translation;
+}
+
+const translations: Translations = {
+  es: {
+    nav: {
+      inicio: 'Inicio',
+      proyectos: 'Proyectos',
+      habilidades: 'Habilidades',
+      sobreMi: 'Sobre Mí',
+      contacto: 'Contacto'
+    },
+    hero: {
+      greeting: 'Hola, soy',
+      title: 'Ramiro Di Fraia',
+      subtitle: 'Desarrollador Web Full Stack',
+      description: 'Estudiante avanzado de Tecnicatura en Programación en UTN Avellaneda. Especializado en desarrollo web con Angular, TypeScript y tecnologías modernas. Apasionado por crear soluciones eficientes y escalables.',
+      disponible: 'Disponible para trabajar',
+      verProyectos: 'Ver Proyectos',
+      descargarCV: 'Descargar CV'
+    },
+    proyectos: {
+      titulo: 'Mis Proyectos',
+      subtitulo: 'Algunos de los proyectos en los que he trabajado',
+      enDesarrollo: 'En desarrollo',
+      completado: 'Completado',
+      codigoPrivado: 'Código Privado',
+      verCodigo: 'Ver Código',
+      verDemo: 'Ver Demo'
+    },
+    habilidades: {
+      titulo: 'Habilidades Técnicas',
+      frontend: 'Frontend',
+      backend: 'Backend',
+      baseDatos: 'Bases de Datos',
+      herramientas: 'Herramientas'
+    },
+    sobreMi: {
+      titulo: 'Sobre Mí',
+      educacion: 'Tecnicatura en Programación',
+      ubicacion: 'UTN Avellaneda, Buenos Aires',
+      quienSoy: '¿Quién soy?',
+      descripcion1: 'Soy un desarrollador apasionado por la tecnología y el aprendizaje continuo. Me especializo en crear aplicaciones web modernas y funcionales, siempre buscando las mejores prácticas y soluciones eficientes.',
+      descripcion2: 'Utilizo herramientas modernas como IA para optimizar mi flujo de trabajo, sin perder de vista la importancia de entender profundamente el código que escribo. Estoy constantemente explorando nuevas tecnologías y metodologías para mejorar mis habilidades.'
+    },
+    contacto: {
+      titulo: 'Conectemos',
+      subtitulo: 'Estoy disponible para nuevas oportunidades. ¡Hablemos!',
+      email: 'Email',
+      enviarCorreo: 'Enviar correo',
+      verPerfil: 'Ver perfil',
+      conectar: 'Conectar',
+      formulario: {
+        titulo: 'O envíame un mensaje directo',
+        nombre: 'Nombre',
+        nombrePlaceholder: 'Tu nombre',
+        email: 'Email',
+        emailPlaceholder: 'tu@email.com',
+        mensaje: 'Mensaje',
+        mensajePlaceholder: 'Escribe tu mensaje aquí...',
+        enviar: 'Enviar Mensaje',
+        enviando: 'Enviando...',
+        exito: '¡Mensaje enviado con éxito! Te responderé pronto.',
+        error: 'Hubo un error al enviar el mensaje. Por favor, intenta nuevamente.'
+      }
+    },
+    footer: {
+      construido: 'Este portafolio fue construido con'
+    }
+  },
+  en: {
+    nav: {
+      inicio: 'Home',
+      proyectos: 'Projects',
+      habilidades: 'Skills',
+      sobreMi: 'About Me',
+      contacto: 'Contact'
+    },
+    hero: {
+      greeting: "Hi, I'm",
+      title: 'Ramiro Di Fraia',
+      subtitle: 'Full Stack Web Developer',
+      description: 'Advanced student of Programming Technology at UTN Avellaneda. Specialized in web development with Angular, TypeScript and modern technologies. Passionate about creating efficient and scalable solutions.',
+      disponible: 'Available for work',
+      verProyectos: 'View Projects',
+      descargarCV: 'Download CV'
+    },
+    proyectos: {
+      titulo: 'My Projects',
+      subtitulo: 'Some of the projects I have worked on',
+      enDesarrollo: 'In development',
+      completado: 'Completed',
+      codigoPrivado: 'Private Code',
+      verCodigo: 'View Code',
+      verDemo: 'View Demo'
+    },
+    habilidades: {
+      titulo: 'Technical Skills',
+      frontend: 'Frontend',
+      backend: 'Backend',
+      baseDatos: 'Databases',
+      herramientas: 'Tools'
+    },
+    sobreMi: {
+      titulo: 'About Me',
+      educacion: 'Programming Technology Degree',
+      ubicacion: 'UTN Avellaneda, Buenos Aires',
+      quienSoy: 'Who am I?',
+      descripcion1: "I'm a developer passionate about technology and continuous learning. I specialize in creating modern and functional web applications, always looking for best practices and efficient solutions.",
+      descripcion2: 'I use modern tools like AI to optimize my workflow, without losing sight of the importance of deeply understanding the code I write. I am constantly exploring new technologies and methodologies to improve my skills.'
+    },
+    contacto: {
+      titulo: "Let's Connect",
+      subtitulo: "I'm available for new opportunities. Let's talk!",
+      email: 'Email',
+      enviarCorreo: 'Send email',
+      verPerfil: 'View profile',
+      conectar: 'Connect',
+      formulario: {
+        titulo: 'Or send me a direct message',
+        nombre: 'Name',
+        nombrePlaceholder: 'Your name',
+        email: 'Email',
+        emailPlaceholder: 'your@email.com',
+        mensaje: 'Message',
+        mensajePlaceholder: 'Write your message here...',
+        enviar: 'Send Message',
+        enviando: 'Sending...',
+        exito: 'Message sent successfully! I will respond soon.',
+        error: 'There was an error sending the message. Please try again.'
+      }
+    },
+    footer: {
+      construido: 'This portfolio was built with'
+    }
+  }
+};
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App implements OnInit {
-  private platformId = inject(PLATFORM_ID);
-  
-  // Signals para el estado de la app
-  scrollY = signal(0);
+  // Signals para estado
+  currentLang = signal<'es' | 'en'>('es');
+  isDarkMode = signal(true);
   activeSection = signal('inicio');
-  isNavbarScrolled = signal(false);
   isMobileMenuOpen = signal(false);
-  isDarkMode = signal(true); // Nuevo: tema oscuro por defecto
+  
+  // Signals para el formulario
+  formSubmitting = signal(false);
+  formSubmitted = signal(false);
+  formError = signal(false);
+  
+  // ViewChild para el formulario
+  @ViewChild('contactFormRef') contactFormRef?: NgForm;
 
-  // Formulario de contacto
+  // Datos del formulario
   contactForm = {
     name: '',
     email: '',
     message: ''
   };
-  formSubmitted = signal(false);
-  formSubmitting = signal(false);
+
+  // Traducciones computadas
+  t = signal<Translation>(translations['es']);
 
   constructor() {
-    // Inicializar IntersectionObserver después de renderizar
-    afterNextRender(() => {
-      this.initScrollAnimations();
-      this.loadThemePreference();
+    // Inicializar EmailJS
+    emailjs.init('aPBNob_2cmXxQmQpe');
+
+    // Cargar preferencias guardadas
+    const savedLang = localStorage.getItem('preferredLang') as 'es' | 'en' | null;
+    const savedTheme = localStorage.getItem('preferredTheme');
+    
+    if (savedLang) {
+      this.currentLang.set(savedLang);
+      this.t.set(translations[savedLang]);
+    }
+    
+    if (savedTheme === 'light') {
+      this.isDarkMode.set(false);
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+
+    // Efecto para actualizar traducciones cuando cambia el idioma
+    effect(() => {
+      this.t.set(translations[this.currentLang()]);
     });
   }
 
   ngOnInit() {
-    // Listener para el scroll
-    if (isPlatformBrowser(this.platformId)) {
-      window.addEventListener('scroll', () => this.handleScroll());
-    }
+    this.setupScrollAnimations();
   }
 
-  handleScroll() {
-    const currentScrollY = window.scrollY;
-    this.scrollY.set(currentScrollY);
-    
-    // Cambiar estilo del navbar después de 50px
-    this.isNavbarScrolled.set(currentScrollY > 50);
-    
-    // Detectar sección activa
-    this.detectActiveSection();
+  // Toggle idioma
+  toggleLanguage() {
+    const newLang = this.currentLang() === 'es' ? 'en' : 'es';
+    this.currentLang.set(newLang);
+    localStorage.setItem('preferredLang', newLang);
   }
 
-  detectActiveSection() {
-    const sections = ['inicio', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
-    
-    for (const section of sections) {
-      const element = document.getElementById(section);
-      if (element) {
-        const rect = element.getBoundingClientRect();
-        if (rect.top <= 150 && rect.bottom >= 150) {
-          this.activeSection.set(section);
-          break;
-        }
-      }
-    }
+  // Toggle tema
+  toggleTheme() {
+    const newTheme = !this.isDarkMode();
+    this.isDarkMode.set(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme ? 'dark' : 'light');
+    localStorage.setItem('preferredTheme', newTheme ? 'dark' : 'light');
   }
 
+  // Toggle mobile menu
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.set(!this.isMobileMenuOpen());
+  }
+
+  // Scroll a sección
   scrollToSection(sectionId: string) {
-    if (!isPlatformBrowser(this.platformId)) return;
-    
     const element = document.getElementById(sectionId);
     if (element) {
-      const navbarHeight = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navbarHeight;
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
 
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth'
       });
 
+      this.activeSection.set(sectionId);
       this.isMobileMenuOpen.set(false);
     }
   }
 
-  toggleMobileMenu() {
-    this.isMobileMenuOpen.set(!this.isMobileMenuOpen());
-  }
-
+  // Check si sección está activa
   isActive(section: string): boolean {
     return this.activeSection() === section;
   }
 
-  // Animaciones de scroll
-  initScrollAnimations() {
-    if (!isPlatformBrowser(this.platformId)) return;
+  // Listener para scroll
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const sections = ['inicio', 'proyectos', 'habilidades', 'sobre-mi', 'contacto'];
+    const scrollPosition = window.pageYOffset + 100;
 
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px'
-    };
+    for (const sectionId of sections) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const offsetTop = element.offsetTop;
+        const offsetHeight = element.offsetHeight;
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-in');
+        if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+          this.activeSection.set(sectionId);
+          break;
         }
-      });
-    }, observerOptions);
-
-    const animateElements = document.querySelectorAll('.animate-on-scroll');
-    animateElements.forEach(el => observer.observe(el));
-  }
-
-  // Tema oscuro/claro
-  toggleTheme() {
-    this.isDarkMode.set(!this.isDarkMode());
-    this.applyTheme();
-    this.saveThemePreference();
-  }
-
-  applyTheme() {
-    if (!isPlatformBrowser(this.platformId)) return;
-    
-    if (this.isDarkMode()) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
+      }
     }
   }
 
-  loadThemePreference() {
-    if (!isPlatformBrowser(this.platformId)) return;
+  // Check si navbar tiene scroll
+  isNavbarScrolled(): boolean {
+    return window.pageYOffset > 50;
+  }
+
+  // Descargar CV
+  downloadCV() {
+    const cvUrl = this.currentLang() === 'es' 
+      ? 'assets/cv/CV-Ramiro-Di-Fraia-ES.pdf'
+      : 'assets/cv/CV-Ramiro-Di-Fraia-EN.pdf';
     
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      this.isDarkMode.set(savedTheme === 'dark');
-    }
-    this.applyTheme();
+    const link = document.createElement('a');
+    link.href = cvUrl;
+    link.download = `CV-Ramiro-Di-Fraia-${this.currentLang().toUpperCase()}.pdf`;
+    link.click();
   }
 
-  saveThemePreference() {
-    if (!isPlatformBrowser(this.platformId)) return;
-    localStorage.setItem('theme', this.isDarkMode() ? 'dark' : 'light');
-  }
-
-  // Formulario de contacto
+  // Enviar formulario de contacto
   async submitContactForm() {
-    if (!this.contactForm.name || !this.contactForm.email || !this.contactForm.message) {
-      alert('Por favor completa todos los campos');
+    if (!this.contactFormRef?.valid) {
       return;
     }
 
     this.formSubmitting.set(true);
+    this.formError.set(false);
+    this.formSubmitted.set(false);
 
-    // Simular envío (aquí conectarías con un backend o servicio de email)
-    setTimeout(() => {
-      this.formSubmitted.set(true);
-      this.formSubmitting.set(false);
+    try {
+      const response = await emailjs.send(
+        'service_var1028',
+        'template_ayba3xd',
+        {
+          from_name: this.contactForm.name,
+          from_email: this.contactForm.email,
+          message: this.contactForm.message,
+        },
+        'aPBNob_2cmXxQmQpe'
+      );
+
+      console.log('Email enviado con éxito:', response);
       
-      // Resetear formulario
-      this.contactForm = {
-        name: '',
-        email: '',
-        message: ''
-      };
+      this.formSubmitted.set(true);
+      this.contactForm = { name: '', email: '', message: '' };
+      this.contactFormRef?.reset();
 
-      // Ocultar mensaje de éxito después de 5 segundos
       setTimeout(() => {
         this.formSubmitted.set(false);
       }, 5000);
-    }, 1500);
+
+    } catch (error) {
+      console.error('Error al enviar email:', error);
+      this.formError.set(true);
+      
+      setTimeout(() => {
+        this.formError.set(false);
+      }, 5000);
+    } finally {
+      this.formSubmitting.set(false);
+    }
+  }
+
+  // Configurar animaciones de scroll
+  private setupScrollAnimations() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    // Observar todos los elementos con la clase animate-on-scroll
+    setTimeout(() => {
+      const elements = document.querySelectorAll('.animate-on-scroll');
+      elements.forEach(el => observer.observe(el));
+    }, 100);
   }
 }

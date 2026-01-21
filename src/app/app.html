@@ -6,13 +6,25 @@
         &lt;Ramiro Di Fraia /&gt;
       </div>
       
-      <!-- Theme Toggle -->
-      <button 
-        class="theme-toggle" 
-        (click)="toggleTheme()"
-        [attr.aria-label]="isDarkMode() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
-        <i class="bi" [class.bi-sun-fill]="!isDarkMode()" [class.bi-moon-fill]="isDarkMode()"></i>
-      </button>
+      <!-- Theme & Language Toggles -->
+      <div class="theme-lang-controls">
+        <!-- Theme Toggle -->
+        <button 
+          class="theme-toggle" 
+          (click)="toggleTheme()"
+          [attr.aria-label]="isDarkMode() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'">
+          <i class="bi" [class.bi-sun-fill]="!isDarkMode()" [class.bi-moon-fill]="isDarkMode()"></i>
+        </button>
+
+        <!-- Language Toggle -->
+        <button 
+          class="lang-toggle" 
+          (click)="toggleLanguage()"
+          [attr.aria-label]="'Cambiar idioma'">
+          <span class="flag-icon">{{ currentLang() === 'es' ? '🇬🇧' : '🇪🇸' }}</span>
+          <span class="lang-text">{{ currentLang() === 'es' ? 'EN' : 'ES' }}</span>
+        </button>
+      </div>
 
       <!-- Links Desktop -->
       <div class="navbar-links d-none d-lg-flex">
@@ -22,7 +34,11 @@
           [class.active]="isActive(section)"
           class="nav-link-btn"
         >
-          {{ section === 'sobre-mi' ? 'Sobre Mí' : section.charAt(0).toUpperCase() + section.slice(1) }}
+          <ng-container *ngIf="section === 'inicio'">{{ t().nav.inicio }}</ng-container>
+          <ng-container *ngIf="section === 'proyectos'">{{ t().nav.proyectos }}</ng-container>
+          <ng-container *ngIf="section === 'habilidades'">{{ t().nav.habilidades }}</ng-container>
+          <ng-container *ngIf="section === 'sobre-mi'">{{ t().nav.sobreMi }}</ng-container>
+          <ng-container *ngIf="section === 'contacto'">{{ t().nav.contacto }}</ng-container>
         </button>
       </div>
 
@@ -50,7 +66,11 @@
       [class.active]="isActive(section)"
       class="mobile-menu-link"
     >
-      {{ section === 'sobre-mi' ? 'Sobre Mí' : section.charAt(0).toUpperCase() + section.slice(1) }}
+      <ng-container *ngIf="section === 'inicio'">{{ t().nav.inicio }}</ng-container>
+      <ng-container *ngIf="section === 'proyectos'">{{ t().nav.proyectos }}</ng-container>
+      <ng-container *ngIf="section === 'habilidades'">{{ t().nav.habilidades }}</ng-container>
+      <ng-container *ngIf="section === 'sobre-mi'">{{ t().nav.sobreMi }}</ng-container>
+      <ng-container *ngIf="section === 'contacto'">{{ t().nav.contacto }}</ng-container>
     </button>
   </div>
 </div>
@@ -73,7 +93,7 @@
           <img src="assets/images/profile.jpg" alt="Ramiro Di Fraia" class="profile-image" loading="lazy">
           <div class="status-badge">
             <i class="bi bi-circle-fill text-success"></i>
-            Disponible para trabajar
+            {{ t().hero.disponible }}
           </div>
         </div>
       </div>
@@ -81,29 +101,27 @@
       <!-- Columna derecha: Info -->
       <div class="col-lg-8">
         <h1 class="display-3 fw-bold mb-3 animate-on-scroll">
-          Hola, soy <span class="gradient-text">Ramiro Di Fraia</span>
+          {{ t().hero.greeting }} <span class="gradient-text">{{ t().hero.title }}</span>
         </h1>
         
         <h2 class="h3 text-secondary mb-4 animate-on-scroll">
-          Desarrollador Web Full Stack
+          {{ t().hero.subtitle }}
         </h2>
         
         <p class="lead text-muted mb-4 animate-on-scroll">
-          Estudiante avanzado de Tecnicatura en Programación en UTN Avellaneda. 
-          Especializado en desarrollo web con Angular, TypeScript y tecnologías modernas.
-          Apasionado por crear soluciones eficientes y escalables.
+          {{ t().hero.description }}
         </p>
 
         <!-- Botones de acción -->
         <div class="d-flex flex-wrap gap-3 mb-4 animate-on-scroll">
-          <a href="#proyectos" class="btn btn-violet">
+          <button (click)="scrollToSection('proyectos')" class="btn btn-violet">
             <i class="bi bi-code-slash me-2"></i>
-            Ver Proyectos
-          </a>
-          <a href="#" class="btn btn-violet-outline">
+            {{ t().hero.verProyectos }}
+          </button>
+          <button (click)="downloadCV()" class="btn btn-violet-outline">
             <i class="bi bi-download me-2"></i>
-            Descargar CV
-          </a>
+            {{ t().hero.descargarCV }}
+          </button>
         </div>
 
         <!-- Iconos de redes y email -->
@@ -140,10 +158,12 @@
     <!-- Título de sección -->
     <div class="section-header text-center mb-5 animate-on-scroll">
       <h2 class="display-4 fw-bold mb-3">
-        Mis <span class="gradient-text">Proyectos</span>
+        <ng-container *ngIf="currentLang() === 'es'">Mis</ng-container>
+        <ng-container *ngIf="currentLang() === 'en'">My</ng-container>
+        <span class="gradient-text">{{ t().proyectos.titulo.split(' ').slice(-1)[0] }}</span>
       </h2>
       <p class="lead text-muted">
-        Algunos de los proyectos en los que he trabajado
+        {{ t().proyectos.subtitulo }}
       </p>
     </div>
 
@@ -159,12 +179,17 @@
           <div class="project-content p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h3 class="h5 mb-0">TCG Social</h3>
-              <span class="badge-status status-progress">En desarrollo</span>
+              <span class="badge-status status-progress">{{ t().proyectos.enDesarrollo }}</span>
             </div>
-            <p class="text-muted mb-3">
+            <p class="text-muted mb-3" *ngIf="currentLang() === 'es'">
               Red social para coleccionistas y jugadores de TCG. Incluye sistema de publicaciones, 
               perfiles personalizados, mensajería privada en tiempo real y comunidades dedicadas 
               a Yu-Gi-Oh!, Pokémon TCG y Magic: The Gathering.
+            </p>
+            <p class="text-muted mb-3" *ngIf="currentLang() === 'en'">
+              Social network for TCG collectors and players. Features publication system, 
+              personalized profiles, real-time private messaging and dedicated communities 
+              for Yu-Gi-Oh!, Pokémon TCG and Magic: The Gathering.
             </p>
             <div class="tech-tags mb-3">
               <span class="tech-tag">Angular</span>
@@ -173,11 +198,11 @@
               <span class="tech-tag">MongoDB</span>
             </div>
             <div class="project-links">
-              <button class="btn btn-sm btn-violet me-2" disabled title="Código privado - Proyecto comercial en desarrollo">
-                <i class="bi bi-lock-fill me-1"></i> Código Privado
+              <button class="btn btn-sm btn-violet me-2" disabled [title]="currentLang() === 'es' ? 'Código privado - Proyecto comercial en desarrollo' : 'Private code - Commercial project in development'">
+                <i class="bi bi-lock-fill me-1"></i> {{ t().proyectos.codigoPrivado }}
               </button>
               <a href="https://red-social-tcg-frontend.vercel.app" class="btn btn-sm btn-violet-outline" target="_blank" rel="noopener noreferrer">
-                <i class="bi bi-box-arrow-up-right me-1"></i> Ver Demo
+                <i class="bi bi-box-arrow-up-right me-1"></i> {{ t().proyectos.verDemo }}
               </a>
             </div>
           </div>
@@ -192,12 +217,16 @@
           </div>
           <div class="project-content p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h3 class="h5 mb-0">Sala de Juegos</h3>
-              <span class="badge-status status-completed">Completado</span>
+              <h3 class="h5 mb-0">{{ currentLang() === 'es' ? 'Sala de Juegos' : 'Game Room' }}</h3>
+              <span class="badge-status status-completed">{{ t().proyectos.completado }}</span>
             </div>
-            <p class="text-muted mb-3">
+            <p class="text-muted mb-3" *ngIf="currentLang() === 'es'">
               Plataforma de minijuegos con diseño gaming moderno. Incluye sistema de autenticación, 
               ranking de jugadores y múltiples juegos interactivos como Ahorcado y Mayor o Menor.
+            </p>
+            <p class="text-muted mb-3" *ngIf="currentLang() === 'en'">
+              Mini-games platform with modern gaming design. Includes authentication system, 
+              player ranking and multiple interactive games like Hangman and Higher or Lower.
             </p>
             <div class="tech-tags mb-3">
               <span class="tech-tag">Angular</span>
@@ -206,79 +235,95 @@
             </div>
             <div class="project-links">
               <a href="https://github.com/RamiroDi/RamiroDi-ProgIV-SalaDeJuegos" class="btn btn-sm btn-violet me-2" target="_blank" rel="noopener noreferrer">
-                <i class="bi bi-github me-1"></i> Código
+                <i class="bi bi-github me-1"></i> {{ t().proyectos.verCodigo }}
               </a>
-              <a href="https://ramiro-di-prog-iv-sala-de-juegos.vercel.app/" class="btn btn-sm btn-violet-outline" target="_blank" rel="noopener noreferrer">
-                <i class="bi bi-box-arrow-up-right me-1"></i> Demo
+              <a href="https://ramirodi-prog-iv-sala-de-juegos.vercel.app/" class="btn btn-sm btn-violet-outline" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-box-arrow-up-right me-1"></i> {{ t().proyectos.verDemo }}
               </a>
             </div>
           </div>
         </div>
       </div>
 
+    </div>
+
+  </div>
+</section>
+
 <!-- Habilidades Section -->
 <section id="habilidades" class="habilidades-section py-5">
   <div class="container">
     
-    <!-- Título de sección -->
-    <div class="section-header text-center mb-5 animate-on-scroll">
-      <h2 class="display-4 fw-bold mb-3">
-        Stack <span class="gradient-text">Tecnológico</span>
-      </h2>
-      <p class="lead">
-        Tecnologías y herramientas con las que trabajo
-      </p>
-    </div>
-
     <!-- Lenguajes de Programación -->
-    <div class="skills-category mb-5">
-      <h3 class="h4 mb-4 animate-on-scroll">
-        <i class="bi bi-code-square me-2 text-violet"></i>
-        Lenguajes de Programación
+    <div class="mb-5 animate-on-scroll">
+      <h3 class="h4 mb-4 d-flex align-items-center">
+        <i class="bi bi-code-slash me-3 text-violet"></i>
+        <span *ngIf="currentLang() === 'es'">Lenguajes de Programación</span>
+        <span *ngIf="currentLang() === 'en'">Programming Languages</span>
       </h3>
-      <div class="row g-3">
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-javascript-plain colored skill-icon-devicon"></i>
-            <h5>JavaScript</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 85%"></div>
+      
+      <div class="row g-4">
+        <!-- JavaScript -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-javascript-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">JavaScript</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-typescript-plain colored skill-icon-devicon"></i>
-            <h5>TypeScript</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 70%"></div>
+
+        <!-- TypeScript -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-typescript-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">TypeScript</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 90%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-python-plain colored skill-icon-devicon"></i>
-            <h5>Python</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 75%"></div>
+
+        <!-- Python -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-python-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">Python</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 75%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-html5-plain colored skill-icon-devicon"></i>
-            <h5>HTML</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 85%"></div>
+
+        <!-- HTML -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-html5-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">HTML</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 95%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-css3-plain colored skill-icon-devicon"></i>
-            <h5>CSS</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 85%"></div>
+
+        <!-- CSS -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-css3-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">CSS</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 90%;"></div>
             </div>
           </div>
         </div>
@@ -286,63 +331,88 @@
     </div>
 
     <!-- Frameworks y Librerías -->
-    <div class="skills-category mb-5">
-      <h3 class="h4 mb-4 animate-on-scroll">
-        <i class="bi bi-layers me-2 text-violet"></i>
-        Frameworks y Librerías
+    <div class="mb-5 animate-on-scroll">
+      <h3 class="h4 mb-4 d-flex align-items-center">
+        <i class="bi bi-layers me-3 text-violet"></i>
+        <span *ngIf="currentLang() === 'es'">Frameworks y Librerías</span>
+        <span *ngIf="currentLang() === 'en'">Frameworks and Libraries</span>
       </h3>
-      <div class="row g-3">
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-angularjs-plain colored skill-icon-devicon"></i>
-            <h5>Angular</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 75%"></div>
+      
+      <div class="row g-4">
+        <!-- Angular -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-angularjs-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">Angular</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 90%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-bootstrap-plain colored skill-icon-devicon"></i>
-            <h5>Bootstrap</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 70%"></div>
+
+        <!-- Bootstrap -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-bootstrap-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">Bootstrap</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-nestjs-original colored skill-icon-devicon"></i>
-            <h5>NestJS</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 65%"></div>
+
+        <!-- NestJS -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-nestjs-original colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">NestJS</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 80%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-nodejs-plain colored skill-icon-devicon"></i>
-            <h5>Node.js</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 70%"></div>
+
+        <!-- Node.js -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-nodejs-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">Node.js</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-express-original skill-icon-devicon"></i>
-            <h5>Express.js</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 60%"></div>
+
+        <!-- Express.js -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-express-original" style="font-size: 4rem; color: #8b5cf6;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">Express.js</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 80%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-tailwindcss-plain colored skill-icon-devicon"></i>
-            <h5>Tailwind CSS</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 45%"></div>
+
+        <!-- Tailwind CSS -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-tailwindcss-original colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">Tailwind CSS</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 75%;"></div>
             </div>
           </div>
         </div>
@@ -350,77 +420,77 @@
     </div>
 
     <!-- Software y Herramientas -->
-    <div class="skills-category mb-5">
-      <h3 class="h4 mb-4 animate-on-scroll">
-        <i class="bi bi-tools me-2 text-violet"></i>
-        Software y Herramientas
+    <div class="mb-5 animate-on-scroll">
+      <h3 class="h4 mb-4 d-flex align-items-center">
+        <i class="bi bi-tools me-3 text-violet"></i>
+        <span *ngIf="currentLang() === 'es'">Software y Herramientas</span>
+        <span *ngIf="currentLang() === 'en'">Software and Tools</span>
       </h3>
-      <div class="row g-3">
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-git-plain colored skill-icon-devicon"></i>
-            <h5>Git</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 75%"></div>
+      
+      <div class="row g-4">
+        <!-- Git -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-git-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">Git</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 90%;"></div>
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-npm-original-wordmark colored skill-icon-devicon"></i>
-            <h5>NPM</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 70%"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-postman-plain colored skill-icon-devicon"></i>
-            <h5>Postman</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 65%"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-vscode-plain colored skill-icon-devicon"></i>
-            <h5>VS Code</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 80%"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 animate-on-scroll">
-          <div class="skill-card">
-            <i class="devicon-mysql-plain colored skill-icon-devicon"></i>
-            <h5>MySQL</h5>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: 45%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Versatilidad -->
-    <div class="versatility-banner animate-on-scroll">
-      <div class="row align-items-center">
-        <div class="col-lg-8">
-          <h3 class="h4 mb-3">
-            <i class="bi bi-lightbulb me-2"></i>
-            Adaptabilidad y Aprendizaje Continuo
-          </h3>
-          <p class="mb-0">
-            Mi enfoque está en entender los fundamentos y adaptarme rápidamente a nuevas tecnologías. 
-            Utilizo herramientas modernas como IA para optimizar el desarrollo y aprender constantemente. 
-            <strong>Si un proyecto requiere una tecnología específica, cuento con la capacidad de aprenderla 
-            y aplicarla eficientemente.</strong>
-          </p>
+        <!-- NPM -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-npm-original-wordmark colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">NPM</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
+            </div>
+          </div>
         </div>
-        <div class="col-lg-4 text-center">
-          <i class="bi bi-gear-fill versatility-icon"></i>
+
+        <!-- Postman -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-postman-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">Postman</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 80%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MySQL -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-mysql-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">MySQL</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 75%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MongoDB -->
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="skill-card-large">
+            <div class="skill-icon-large">
+              <i class="devicon-mongodb-plain colored" style="font-size: 4rem;"></i>
+            </div>
+            <h5 class="mt-3 mb-3">MongoDB</h5>
+            <div class="skill-progress">
+              <div class="skill-progress-bar" style="width: 85%;"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -435,40 +505,35 @@
     <!-- Título de sección -->
     <div class="section-header text-center mb-5 animate-on-scroll">
       <h2 class="display-4 fw-bold mb-3">
-        Sobre <span class="gradient-text">Mí</span>
+        <span class="gradient-text">{{ t().sobreMi.titulo }}</span>
       </h2>
-      <p class="lead">
-        Conoce más sobre mi formación y trayectoria
-      </p>
     </div>
 
     <div class="row justify-content-center">
-      
-      <!-- Card principal -->
-      <div class="col-lg-8 animate-on-scroll">
-        <div class="info-card">
+      <div class="col-lg-8">
+        <div class="about-card card-custom p-5 animate-on-scroll">
           
           <!-- Educación -->
-          <div class="info-header mb-4">
-            <i class="bi bi-mortarboard-fill info-icon"></i>
-            <h3 class="h4 mb-0">Educación</h3>
-          </div>
-          
-          <div class="education-item mb-4">
-            <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+          <div class="education-info mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-2">
               <div>
-                <h5 class="mb-1">Tecnicatura en Programación</h5>
+                <h3 class="h5 mb-1">{{ t().sobreMi.educacion }}</h3>
                 <p class="text-violet mb-0">Universidad Tecnológica Nacional</p>
               </div>
-              <span class="badge-date">2024 - Presente</span>
+              <span class="badge-date">2024 - {{ currentLang() === 'es' ? 'Presente' : 'Present' }}</span>
             </div>
             <p class="text-secondary mb-3">
-              <i class="bi bi-geo-alt-fill me-2"></i>UTN Avellaneda, Buenos Aires
+              <i class="bi bi-geo-alt-fill me-2"></i>{{ t().sobreMi.ubicacion }}
             </p>
-            <p class="text-muted">
+            <p class="text-muted" *ngIf="currentLang() === 'es'">
               A un paso de recibirme. Enfocado en desarrollo web full stack con tecnologías modernas. 
               Durante la carrera desarrollé múltiples proyectos prácticos utilizando Angular, TypeScript, 
               Python y metodologías ágiles.
+            </p>
+            <p class="text-muted" *ngIf="currentLang() === 'en'">
+              One step away from graduating. Focused on full stack web development with modern technologies. 
+              During my studies I developed multiple practical projects using Angular, TypeScript, 
+              Python and agile methodologies.
             </p>
           </div>
 
@@ -476,16 +541,12 @@
 
           <!-- Sobre mí - texto personal -->
           <div class="about-text">
-            <h4 class="mb-3">¿Quién soy?</h4>
+            <h4 class="mb-3">{{ t().sobreMi.quienSoy }}</h4>
             <p class="text-secondary">
-              Soy un desarrollador apasionado por la tecnología y el aprendizaje continuo. 
-              Me especializo en crear aplicaciones web modernas y funcionales, siempre buscando 
-              las mejores prácticas y soluciones eficientes.
+              {{ t().sobreMi.descripcion1 }}
             </p>
             <p class="text-secondary mb-0">
-              Utilizo herramientas modernas como IA para optimizar mi flujo de trabajo, sin perder 
-              de vista la importancia de entender profundamente el código que escribo. Estoy 
-              constantemente explorando nuevas tecnologías y metodologías para mejorar mis habilidades.
+              {{ t().sobreMi.descripcion2 }}
             </p>
           </div>
 
@@ -504,10 +565,10 @@
     <!-- Título de sección -->
     <div class="section-header text-center mb-5 animate-on-scroll">
       <h2 class="display-4 fw-bold mb-3">
-        <span class="gradient-text">Conectemos</span>
+        <span class="gradient-text">{{ t().contacto.titulo }}</span>
       </h2>
       <p class="lead">
-        Estoy disponible para nuevas oportunidades. ¡Hablemos!
+        {{ t().contacto.subtitulo }}
       </p>
     </div>
 
@@ -519,9 +580,9 @@
           <div class="contact-icon">
             <i class="bi bi-envelope-fill"></i>
           </div>
-          <h5>Email</h5>
+          <h5>{{ t().contacto.email }}</h5>
           <p>ramirodifraia@gmail.com</p>
-          <span class="contact-action">Enviar correo <i class="bi bi-arrow-right ms-2"></i></span>
+          <span class="contact-action">{{ t().contacto.enviarCorreo }} <i class="bi bi-arrow-right ms-2"></i></span>
         </a>
       </div>
 
@@ -533,7 +594,7 @@
           </div>
           <h5>GitHub</h5>
           <p>github.com/RamiroDi</p>
-          <span class="contact-action">Ver perfil <i class="bi bi-arrow-right ms-2"></i></span>
+          <span class="contact-action">{{ t().contacto.verPerfil }} <i class="bi bi-arrow-right ms-2"></i></span>
         </a>
       </div>
 
@@ -545,7 +606,7 @@
           </div>
           <h5>LinkedIn</h5>
           <p>linkedin.com/in/ramiro-di-fraia</p>
-          <span class="contact-action">Conectar <i class="bi bi-arrow-right ms-2"></i></span>
+          <span class="contact-action">{{ t().contacto.conectar }} <i class="bi bi-arrow-right ms-2"></i></span>
         </a>
       </div>
 
@@ -555,46 +616,46 @@
     <div class="row justify-content-center">
       <div class="col-lg-8 animate-on-scroll">
         <div class="contact-form-card">
-          <h3 class="h4 mb-4 text-center">O envíame un mensaje directo</h3>
+          <h3 class="h4 mb-4 text-center">{{ t().contacto.formulario.titulo }}</h3>
           
           <form (ngSubmit)="submitContactForm()" #contactFormRef="ngForm">
             <div class="row g-3">
               
               <div class="col-md-6">
-                <label for="name" class="form-label">Nombre</label>
+                <label for="name" class="form-label">{{ t().contacto.formulario.nombre }}</label>
                 <input 
                   type="text" 
                   class="form-control form-control-custom" 
                   id="name"
                   [(ngModel)]="contactForm.name"
                   name="name"
-                  placeholder="Tu nombre"
+                  [placeholder]="t().contacto.formulario.nombrePlaceholder"
                   required
                 >
               </div>
 
               <div class="col-md-6">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label">{{ t().contacto.formulario.email }}</label>
                 <input 
                   type="email" 
                   class="form-control form-control-custom" 
                   id="email"
                   [(ngModel)]="contactForm.email"
                   name="email"
-                  placeholder="tu@email.com"
+                  [placeholder]="t().contacto.formulario.emailPlaceholder"
                   required
                 >
               </div>
 
               <div class="col-12">
-                <label for="message" class="form-label">Mensaje</label>
+                <label for="message" class="form-label">{{ t().contacto.formulario.mensaje }}</label>
                 <textarea 
                   class="form-control form-control-custom" 
                   id="message"
                   [(ngModel)]="contactForm.message"
                   name="message"
                   rows="5"
-                  placeholder="Escribe tu mensaje aquí..."
+                  [placeholder]="t().contacto.formulario.mensajePlaceholder"
                   required
                 ></textarea>
               </div>
@@ -607,11 +668,11 @@
                 >
                   <span *ngIf="!formSubmitting()">
                     <i class="bi bi-send me-2"></i>
-                    Enviar Mensaje
+                    {{ t().contacto.formulario.enviar }}
                   </span>
                   <span *ngIf="formSubmitting()">
                     <i class="bi bi-hourglass-split me-2"></i>
-                    Enviando...
+                    {{ t().contacto.formulario.enviando }}
                   </span>
                 </button>
               </div>
@@ -620,7 +681,15 @@
               <div class="col-12" *ngIf="formSubmitted()">
                 <div class="alert alert-success-custom">
                   <i class="bi bi-check-circle-fill me-2"></i>
-                  ¡Mensaje enviado con éxito! Te responderé pronto.
+                  {{ t().contacto.formulario.exito }}
+                </div>
+              </div>
+
+              <!-- Mensaje de error -->
+              <div class="col-12" *ngIf="formError()">
+                <div class="alert alert-danger-custom">
+                  <i class="bi bi-x-circle-fill me-2"></i>
+                  {{ t().contacto.formulario.error }}
                 </div>
               </div>
 
@@ -637,7 +706,7 @@
 <section class="built-with-section py-5 animate-on-scroll">
   <div class="container">
     <div class="text-center mb-4">
-      <h5 class="text-secondary mb-3">Este portafolio fue construido con</h5>
+      <h5 class="text-secondary mb-3">{{ t().footer.construido }}</h5>
       <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
         <div class="built-tech">
           <i class="devicon-angularjs-plain colored" style="font-size: 3rem;"></i>
