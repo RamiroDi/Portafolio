@@ -341,8 +341,8 @@ export class App implements OnInit {
   // Descargar CV
   downloadCV() {
     const cvUrl = this.currentLang() === 'es' 
-      ? 'assets/cv/CV-Ramiro-Di-Fraia-ES.pdf'
-      : 'assets/cv/CV-Ramiro-Di-Fraia-EN.pdf';
+      ? 'assets/images/CV-Ramiro-Di-Fraia-ES.pdf'
+      : 'assets/images/CV-Ramiro-Di-Fraia-EN.pdf';
     
     const link = document.createElement('a');
     link.href = cvUrl;
