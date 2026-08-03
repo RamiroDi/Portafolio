@@ -30,6 +30,10 @@ interface Translation {
     verCodigo: string;
     verDemo: string;
   };
+  yendorestobar: {
+    titulo: string;
+    descripcion: string;
+  };
   habilidades: {
     titulo: string;
     frontend: string;
