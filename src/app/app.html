@@ -245,6 +245,42 @@
         </div>
       </div>
 
+      <!-- Proyecto: YendoRestoBar -->
+      <div class="col-lg-4 col-md-6 animate-on-scroll">
+        <div class="project-card card-custom h-100">
+          <div class="project-image">
+            <img src="assets/images/yendorestobar.jpg" alt="YendoRestoBar" class="w-100" loading="lazy">
+          </div>
+          <div class="project-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="h5 mb-0">YendoRestoBar</h3>
+              <span class="badge-status status-completed">{{ t().proyectos.completado }}</span>
+            </div>
+            <p class="text-muted mb-3" *ngIf="currentLang() === 'es'">
+              {{ t().yendorestobar.descripcion }}
+            </p>
+            <p class="text-muted mb-3" *ngIf="currentLang() === 'en'">
+              {{ t().yendorestobar.descripcion }}
+            </p>
+            <div class="tech-tags mb-3">
+              <span class="tech-tag">Ionic</span>
+              <span class="tech-tag">Angular</span>
+              <span class="tech-tag">Capacitor</span>
+              <span class="tech-tag">Supabase</span>
+              <span class="tech-tag">PostgreSQL</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/RamiroDi/YendoRestoBar-2026" class="btn btn-sm btn-violet me-2" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-github me-1"></i> {{ t().proyectos.verCodigo }}
+              </a>
+              <span class="btn btn-sm btn-violet-outline disabled" [title]="currentLang() === 'es' ? 'App mobile en producción' : 'Production mobile app'">
+                <i class="bi bi-phone me-1"></i> APK
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>

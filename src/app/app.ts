@@ -102,6 +102,10 @@ const translations: Translations = {
       verCodigo: 'Ver Código',
       verDemo: 'Ver Demo'
     },
+    yendorestobar: {
+      titulo: 'YendoRestoBar',
+      descripcion: 'Plataforma integral de gestión de restaurantes con app nativa Android y web. Automatiza lista de espera (QR), menú digital, pedidos, chat en tiempo real y 6 dashboards diferenciados por rol.'
+    },
     habilidades: {
       titulo: 'Habilidades Técnicas',
       frontend: 'Frontend',
@@ -167,6 +171,10 @@ const translations: Translations = {
       codigoPrivado: 'Private Code',
       verCodigo: 'View Code',
       verDemo: 'View Demo'
+    },
+    yendorestobar: {
+      titulo: 'YendoRestoBar',
+      descripcion: 'Comprehensive restaurant management platform with native Android app and web interface. Automates waitlist management (QR), digital menu, orders, real-time chat and 6 role-based dashboards.'
     },
     habilidades: {
       titulo: 'Technical Skills',
