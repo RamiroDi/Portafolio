@@ -119,11 +119,11 @@ const translations: Translations = {
     },
     sobreMi: {
       titulo: 'Sobre Mí',
-      educacion: 'Tecnicatura en Programación',
+      educacion: 'Graduado - Tecnicatura en Programación (2026)',
       ubicacion: 'UTN Avellaneda, Buenos Aires',
       quienSoy: '¿Quién soy?',
-      descripcion1: 'Soy un desarrollador apasionado por la tecnología y el aprendizaje continuo. Me especializo en crear aplicaciones web modernas y funcionales, siempre buscando las mejores prácticas y soluciones eficientes.',
-      descripcion2: 'Utilizo herramientas modernas como IA para optimizar mi flujo de trabajo, sin perder de vista la importancia de entender profundamente el código que escribo. Estoy constantemente explorando nuevas tecnologías y metodologías para mejorar mis habilidades.'
+      descripcion1: 'Desarrollador Full Stack graduado de UTN Avellaneda (2026). Especializado en Angular y NestJS con experiencia construyendo aplicaciones en producción: TCG Social (red social full-stack) y YendoRestoBar (app mobile + web para restaurantes con APK nativa). Apasionado por código limpio, arquitectura escalable y sistemas en tiempo real.',
+      descripcion2: 'Tecnólogo pragmático que prioriza resultados y buenas prácticas. Trabajo con TypeScript, PostgreSQL, Supabase y cloud deployment (Vercel/Render). Disponible para roles remotos como desarrollador full-stack o especialista en frontend/backend. Aprendiz rápido, siempre explorando nuevas tecnologías.'
     },
     contacto: {
       titulo: 'Conectemos',
@@ -189,11 +189,11 @@ const translations: Translations = {
     },
     sobreMi: {
       titulo: 'About Me',
-      educacion: 'Programming Technology Degree',
+      educacion: 'Graduated - Programming Technology Degree (2026)',
       ubicacion: 'UTN Avellaneda, Buenos Aires',
       quienSoy: 'Who am I?',
-      descripcion1: "I'm a developer passionate about technology and continuous learning. I specialize in creating modern and functional web applications, always looking for best practices and efficient solutions.",
-      descripcion2: 'I use modern tools like AI to optimize my workflow, without losing sight of the importance of deeply understanding the code I write. I am constantly exploring new technologies and methodologies to improve my skills.'
+      descripcion1: 'Full Stack Developer graduated from UTN Avellaneda (2026). Specialized in Angular and NestJS with hands-on production experience: TCG Social (full-stack social network) and YendoRestoBar (mobile + web restaurant management app with native Android APK). Passionate about clean code, scalable architecture and real-time systems.',
+      descripcion2: 'Pragmatic technologist who prioritizes results and best practices. I work with TypeScript, PostgreSQL, Supabase and cloud deployment (Vercel/Render). Available for remote positions as full-stack developer or frontend/backend specialist. Quick learner, constantly exploring new technologies.'
     },
     contacto: {
       titulo: "Let's Connect",
